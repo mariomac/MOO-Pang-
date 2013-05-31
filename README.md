@@ -21,6 +21,6 @@ Si una bola te toca, se acaba el juego.
 
 Captura de pantalla
 -------------------
-!(shot.png "Captura de pantalla")
+![Captura de pantalla](shot.png "Captura de pantalla")
 
 2011 Mario Macías
