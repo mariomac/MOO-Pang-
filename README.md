@@ -1,26 +1,23 @@
-MOOPang 
-=======
+MOO Pang 
+========
+2011 Mario Macías
+![Screenshot](shot.png "Screenshot")
 
-Sencillo videojuego, especialmente ideado para estudiantes de Programación
-Orientada a Objetos e Ingeniería del Software.
+Simple videogame created for my students of Object-Oriented Design and Programming.
+Code and comments are in Spanish language.
 
-Compilación y ejecución
+Compiling and executing
 -----------------------
-Desde la consola, ves al directorio raíz del proyecto y escribe:
+From the console, go to the project root directory and type:
 
 ant run
 
-Modo de juego
--------------
-Usa las teclas de cursor <- y -> para moverte de izquierda a derecha.
-Usa la barra espaciadora para lanzar flechas que romperán las bolas que caen del
-techo.
-Cada vez que rompas una bola, ésta se dividirá en dos bolas más pequeñas. Cuando
-rompas una bola de las más pequeñas, ésta desaparecerá para siempre.
-Si una bola te toca, se acaba el juego.
+How to play
+-----------
+Use cursor keys <- y -> to move left and right.
 
-Captura de pantalla
--------------------
-![Captura de pantalla](shot.png "Captura de pantalla")
+Use spacebar to shot arrows. If an arrow hits a ball, the ball will be divided into
+two smaller balls. When balls are small enough they will disappear when are hit by
+an arrow.
 
-2011 Mario Macías
+If a ball hits you, game is over.
