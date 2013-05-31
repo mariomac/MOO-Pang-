@@ -1,4 +1,4 @@
-MOOPang (2011 Mario Macías)
+MOOPang 
 =======
 
 Sencillo videojuego, especialmente ideado para estudiantes de Programación
@@ -21,4 +21,6 @@ Si una bola te toca, se acaba el juego.
 
 Captura de pantalla
 -------------------
-![Alt text](shot.png "Captura de pantalla")
+!(shot.png "Captura de pantalla")
+
+2011 Mario Macías
