@@ -1,6 +1,7 @@
 MOO Pang 
 ========
 2011 Mario Macías
+
 ![Screenshot](shot.png "Screenshot")
 
 Simple videogame created for my students of Object-Oriented Design and Programming.
