@@ -12,7 +12,7 @@
 
 package moo.pang.objetosanimados;
 
-import moo.multimedia.Ventana;
+import info.macias.Ventana;
 
 /**
  * Interfaz que describe todos los métodos que debe implementar cualquier objeto
@@ -26,7 +26,7 @@ public interface ObjetoAnimado {
      * que implemente esta interfaz deberá moverse un paso en relación al
      * fotograma anterior, y redibujarse por la ventana.
      * 
-     * @param ventana Ventana donde se dibujará el objeto animado.
+     * @param v Ventana donde se dibujará el objeto animado.
      */
-    public void moverYDibujar(Ventana v);
+    void moverYDibujar(Ventana v);
 }

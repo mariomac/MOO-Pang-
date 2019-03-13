@@ -13,7 +13,8 @@
 package moo.pang.objetosanimados;
 
 import java.awt.Color;
-import moo.multimedia.Ventana;
+
+import info.macias.Ventana;
 import moo.pang.multimedia.Juego;
 
 /**
@@ -68,7 +69,6 @@ public class Bola implements ObjetoAnimado {
     private Juego elJuego;
     /**
      * Crea una bola que rebotará en los márgenes de una pantalla dada
-     * @param pantalla La pantalla cuyos márgenes se deben tener en cuenta
      */
     public Bola(Juego elJuego, float posicionXInicial) {
         this.elJuego = elJuego;

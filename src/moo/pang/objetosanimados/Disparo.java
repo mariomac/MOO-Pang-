@@ -12,7 +12,8 @@
 package moo.pang.objetosanimados;
 
 import java.awt.Color;
-import moo.multimedia.Ventana;
+
+import info.macias.Ventana;
 import moo.pang.multimedia.Juego;
 
 /**

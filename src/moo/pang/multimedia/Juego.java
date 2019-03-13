@@ -12,26 +12,28 @@
 
 package moo.pang.multimedia;
 
-import java.awt.Color;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import moo.multimedia.Ventana;
+import info.macias.Ventana;
 import moo.pang.objetosanimados.Bola;
 import moo.pang.objetosanimados.Disparo;
 import moo.pang.objetosanimados.ObjetoAnimado;
 import moo.pang.objetosanimados.Protagonista;
 
+import java.awt.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Esta es la clase principal del juego. Tiene las siguientes funciones:
  * <ul>
- *   <li>Dibuja todos los elementos por pantalla (método draw)</li>
- *   <li>Llama al metodo mover() de todos los objetos con movimiento</li>
- *   <li>Gestiona (añade, elimina) los objetos móviles</li>
- *   <li>Muestra la presentación y el mensaje de fin de juego</li>
- *   <li>Lleva la cuenta de la puntuación del jugador</li>
+ * <li>Dibuja todos los elementos por pantalla (método draw)</li>
+ * <li>Llama al metodo mover() de todos los objetos con movimiento</li>
+ * <li>Gestiona (añade, elimina) los objetos móviles</li>
+ * <li>Muestra la presentación y el mensaje de fin de juego</li>
+ * <li>Lleva la cuenta de la puntuación del jugador</li>
  * </ul>
+ *
  * @author Mario Macías http://mario.site.ac.upc.edu
  */
 public class Juego {
@@ -80,18 +82,23 @@ public class Juego {
      */
     private static final long ACELERACION_FRECUENCIA_BOLAS = 200;
 
+    private static final int ALTURA_LIENZO = 480;
+    private static final int ANCHO_LIENZO = 640;
+
     private static final Random RANDOM = new Random();
 
     /**
      * Será "true" cuando una bola haya tocado al jugador, y el juego haya acabado.
      */
     private boolean finDeJuego;
+
     /**
      * Se limita a crear una nueva Ventana y asociarla al juego cuya escena
      * mostrará.
      */
     public Juego() {
-        this.ventana = new Ventana("MOOPang", 640, 480);
+        this.ventana = new Ventana("MOOPang", ANCHO_LIENZO, ALTURA_LIENZO);
+        this.ventana.setCamara(ANCHO_LIENZO/2, ALTURA_LIENZO/2, ALTURA_LIENZO);
     }
 
     /**
@@ -108,51 +115,52 @@ public class Juego {
         Disparo.setTotalDisparos(0);
 
         // No saldrá de aquí mientras no hayan tocado al jugador (finDeJuego==true)
-        while(!finDeJuego) {
+        while (!finDeJuego) {
             nuevoFotogramaDeJuego();
-            ventana.mostrarLienzo();
         }
     }
+
     /**
      * Este método gestiona los cambios que se hacen en cada fotograma:
      * <li>Dibuja el escenario (techo, suelos...)</li>
      * <li>Llama a todos los elementos para que se muevan un pasito y se pinten
-     *     en el lienzo</li>
+     * en el lienzo</li>
      * <li>Si toca, lanza una nueva bola desde el techo</li>
      * <li>Una vez todo está pintado, sobreimpresiona la puntuación</li>
      */
     public void nuevoFotogramaDeJuego() {
         //Borra el lienzo, ya que todavía contiene el dibujo del fotograma anterior
-        ventana.borrarLienzoOculto();
 
         //Dibujamos el techo y el suelo
-        ventana.dibujaRectangulo(0,0,MARGEN,ventana.getAlturaLienzo(), Color.yellow);
-        ventana.dibujaRectangulo(getCoordenadaXMargenDerecho(), 0, MARGEN, ventana.getAlturaLienzo(), Color.yellow);
-        ventana.dibujaRectangulo(0, getCoordenadaYSuelo(), ventana.getAnchuraLienzo(), MARGEN, Color.yellow);
+        ventana.dibujaRectangulo(0, 0, MARGEN, ALTURA_LIENZO, Color.yellow);
+        ventana.dibujaRectangulo(getCoordenadaXMargenDerecho(), 0, MARGEN, ALTURA_LIENZO, Color.yellow);
+        ventana.dibujaRectangulo(0, getCoordenadaYSuelo(), ALTURA_LIENZO, MARGEN, Color.yellow);
 
         //Mueve y pinta todos los objetos en pantalla
         //creamos una lista aparte para no tener error de modificación
         //en concurrencia cuando alguno de los objetos solicite insertar o borrar
         //elementos en la lista de objetos animados
         Iterator<ObjetoAnimado> iteradorObjetos = new LinkedList<ObjetoAnimado>(objetosAnimados).iterator();
-        while(iteradorObjetos.hasNext()) {
+        while (iteradorObjetos.hasNext()) {
             iteradorObjetos.next().moverYDibujar(ventana);
-        }        
+        }
 
         //Mira si hay que lanzar una nueva bola desde el techo
         long ahora = System.currentTimeMillis();
-        if(ahora > tiempoDeUltimaBola + frecuenciaEntreBolas) {
+        if (ahora > tiempoDeUltimaBola + frecuenciaEntreBolas) {
             objetosAnimados.add(new Bola(this, (float) (
-                       getCoordenadaXMargenIzquierdo()
-                       + RANDOM.nextInt((int)(getCoordenadaXMargenDerecho() - getCoordenadaXMargenIzquierdo())))));
+                    getCoordenadaXMargenIzquierdo()
+                            + RANDOM.nextInt((int) (getCoordenadaXMargenDerecho() - getCoordenadaXMargenIzquierdo())))));
             tiempoDeUltimaBola = ahora;
         }
         //antes de mostrar el lienzo del juego, sobreimpresiona la puntuación
         ventana.escribeTexto("Puntos: " + puntuacion, 30, 20, 18, Color.white);
+        ventana.actualizaFotograma();
     }
 
     /**
      * Retorna un array con todos los objetos animados que hay en ese momento.
+     *
      * @return
      */
     public ObjetoAnimado[] getObjetosAnimados() {
@@ -162,6 +170,7 @@ public class Juego {
     /**
      * Pide que se elimine un objeto animado (por ejemplo, cuando una bola pequeña
      * ha sido pinchada, se pide que se elimine.
+     *
      * @param obj Una referencia al objeto a eliminar.
      */
     public void eliminarObjetoAnimado(ObjetoAnimado obj) {
@@ -172,6 +181,7 @@ public class Juego {
      * Pide que se añada un objeto animado a la lista (por ejemplo, cuando el
      * jugador lanza un disparo, éste es un objeto animado que se añade a esta
      * lista para ser movido y dibujado junto con los otros)
+     *
      * @param obj Una referencia al objeto a añadir
      */
     public void anyadirObjetoAnimado(ObjetoAnimado obj) {
@@ -189,26 +199,31 @@ public class Juego {
     /**
      * Devuelve la coordenada X de la pared derecha, donde las bolas rebotan,
      * y que también impide el paso del jugador.
+     *
      * @return
      */
     public float getCoordenadaXMargenDerecho() {
-        return ventana.getAnchuraLienzo() - MARGEN;
+        return ANCHO_LIENZO - MARGEN;
     }
+
     /**
      * Devuelve la coordenada X de la pared izquierda, donde las bolas rebotan,
      * y que también impide el paso del jugador.
+     *
      * @return
      */
     public float getCoordenadaXMargenIzquierdo() {
         return MARGEN;
     }
+
     /**
      * Devuelve la coordenada Y del suelo, donde las bolas rebotan, y que es
      * donde se apoya el jugador.
+     *
      * @return
      */
     public float getCoordenadaYSuelo() {
-        return ventana.getAlturaLienzo() - MARGEN;
+        return ALTURA_LIENZO - MARGEN;
     }
 
     /**
@@ -223,20 +238,9 @@ public class Juego {
      * Muestra la pantalla de fin de juego.
      */
     public void finDeJuego() {
-        ventana.escribeTexto("Fin de Juego!", 120,200, 64, Color.green);
-        ventana.mostrarLienzo();
-        //Hacemos que duerma unos tres segundos, para evitar que la pantalla
-        //de fin de juego desaparezca demasiado rápido si el jugador
-        //aprieta la barra espaciadora sin querer (porque, por ejemplo, estaba
-        //disparando cuando le tocó la bola).
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-
-        while(!ventana.isPulsadoEspacio()) {
-            // espera a que se pulse espacio para salir del mensaje de Fin de juego
+        while (!ventana.isPulsadoEscape()) {
+            ventana.escribeTexto("Fin de Juego!", 120, 200, 64, Color.green);
+            ventana.actualizaFotograma();
         }
     }
 
@@ -244,13 +248,10 @@ public class Juego {
      * Muestra la pantalla de presentación
      */
     public void presentacion() {
-        ventana.borrarLienzoOculto();
-
-        ventana.escribeTexto("MOO Pang!", 150,150, 64, Color.red);
-        ventana.escribeTexto("Pulsa espacio para empezar", 180,420, 18, Color.white);
-        ventana.mostrarLienzo();
-        while(!ventana.isPulsadoEspacio()) {
-            // espera a que se pulse espacio para salir de la presentacion
+        while (!ventana.isPulsadoEspacio()) {
+            ventana.escribeTexto("MOO Pang!", 150, 150, 64, Color.red);
+            ventana.escribeTexto("Pulsa espacio para empezar", 180, 420, 18, Color.white);
+            ventana.actualizaFotograma();
         }
     }
 }
